@@ -78,4 +78,13 @@ public class Payload {
                 "}";
     }
 
+    public static String addBookPayload(String bookName, double isbn){
+        return "{\n" +
+                "\"name\":\""+bookName+"\",\n" +
+                "\"isbn\":\""+isbn+"\",\n" +
+                "\"aisle\":\""+Math.random()*1000000+"\",\n" +
+                "\"author\":\"Test\"\n" +
+                "}\n";
+    }
+
 }

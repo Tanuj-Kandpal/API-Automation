@@ -6,21 +6,26 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import org.testng.Assert;
 
+import java.io.IOException;
+import java.nio.file.*;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class Basics {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         //given - all input field
         //when - Submit the API - resource, http method
         //then - Validate the response.
+        Path path = Path.of("example.txt");
+        byte[] data = Files.readAllBytes(path);
 
         RestAssured.baseURI = "https://rahulshettyacademy.com";
         String response = given().queryParam("key", "qaclick123")
                 .header("Content-Type", "application/json")
-                .body(Payload.AddPlace())
+                .body("")
                 .when().post("maps/api/place/add/json")
                 //ALL the ASSERTIONS IN THEN
                 .then().assertThat().statusCode(200)
