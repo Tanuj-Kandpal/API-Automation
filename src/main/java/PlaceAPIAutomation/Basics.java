@@ -19,13 +19,13 @@ public class Basics {
         //given - all input field
         //when - Submit the API - resource, http method
         //then - Validate the response.
-        Path path = Path.of("example.txt");
-        byte[] data = Files.readAllBytes(path);
+        Path path = Path.of("C:\\Users\\kandp\\IdeaProjects\\APIAutomation\\src\\main\\resources\\addPlace.json");
+        String data = new String(Files.readAllBytes(path));
 
         RestAssured.baseURI = "https://rahulshettyacademy.com";
         String response = given().queryParam("key", "qaclick123")
                 .header("Content-Type", "application/json")
-                .body("")
+                .body(data).log().all()
                 .when().post("maps/api/place/add/json")
                 //ALL the ASSERTIONS IN THEN
                 .then().assertThat().statusCode(200)
