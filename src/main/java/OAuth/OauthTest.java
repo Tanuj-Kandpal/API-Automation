@@ -1,12 +1,17 @@
 package OAuth;
 
+import POJO.Api;
+import POJO.GetCourse;
+import POJO.WebAutomation;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
+import org.testng.Assert;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
@@ -23,6 +28,8 @@ public class OauthTest {
         String clientID = properties.getProperty("client_id");
         String clientSecret = properties.getProperty("client_secret");
 
+        String[] webAutomationCoursesArray = {"Selenium Webdriver Java","Cypress","Protractor"};
+
         RestAssured.baseURI="https://rahulshettyacademy.com/oauthapi/getCourseDetails";
         String tokenResponse = given()
                 .formParam("client_id",clientID)
@@ -36,10 +43,26 @@ public class OauthTest {
         String accessToken = js.getString("access_token");
 
 
-        String courseDetailsApiResponse = given().
+        GetCourse courseDetailsApiResponse = given().
                 queryParam("access_token",accessToken)
-                .when().log().all().get("https://rahulshettyacademy.com/oauthapi/getCourseDetails").then().extract().response().asPrettyString();
-        System.out.println(courseDetailsApiResponse);
+                .when().log().all().get("https://rahulshettyacademy.com/oauthapi/getCourseDetails").as(GetCourse.class);
 
+        List<Api> apiCourses = courseDetailsApiResponse.getCourses().getApi();
+        for(int i=0;i<apiCourses.size();i++){
+        if(apiCourses.get(i).getCourseTitle().equals("Rest Assured Automation using Java")){
+            System.out.println(apiCourses.get(i).getPrice());
+        }
+        }
+
+        //Get the courseTitle for webAutomation
+        List<WebAutomation> webAutomation = courseDetailsApiResponse.getCourses().getWebAutomation();
+        ArrayList<String> webAutomationCoursesList = new ArrayList<>();
+        for(int i=0;i<webAutomation.size();i++){
+            webAutomationCoursesList.add(webAutomation.get(i).getCourseTitle());
+        }
+
+        //Asserting the courseTitle
+        List<String> actualWebAutomationCourses = Arrays.asList(webAutomationCoursesArray);
+        Assert.assertEquals(actualWebAutomationCourses, webAutomationCoursesList);
     }
 }

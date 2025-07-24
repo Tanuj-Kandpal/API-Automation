@@ -49,13 +49,11 @@ public class GetCourse {
         this.expertise = expertise;
     }
 
-    public String getLinkedin() {
+    public String getLinkedIn() {
         return linkedIn;
     }
 
-    public void setLinkedin(String linkedin) {
-        this.linkedIn = linkedin;
+    public void setLinkedIn(String linkedIn) {
+        this.linkedIn = linkedIn;
     }
-
-
 }
