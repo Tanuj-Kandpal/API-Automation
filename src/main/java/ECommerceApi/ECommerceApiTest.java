@@ -73,7 +73,8 @@ public class ECommerceApiTest {
 
         //Delete the Orders
         RequestSpecification deleteReq = new RequestSpecBuilder().setBaseUri(apiURI).addHeader("Authorization", token).setContentType(ContentType.JSON).build();
-        given().spec(deleteReq).log().all().when().delete("api/ecom/product/delete-product/"+productId).then().log().all().extract().response().asPrettyString();
+        RequestSpecification deleteEndpoint = given().spec(deleteReq).log().all().pathParam("productId", productId);
+        deleteEndpoint.log().all().when().delete("api/ecom/product/delete-product/{productId}").then().log().all().extract().response().asPrettyString();
 
     }
 }
